@@ -16,7 +16,7 @@ class ApiKeyTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('fake', $this->apiKey->consumerKey);
     }
 
-    public function testGetApi()
+    public function testGetAuth()
     {
         $this->assertSame('', $this->apiKey->getAuth());
     }
