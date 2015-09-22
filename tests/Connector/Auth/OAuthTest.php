@@ -2,7 +2,7 @@
 
 use MatheusMariano\Tumblr\Connector\Auth\OAuth;
 
-class OAuthTest extends \PHPUnit_Framework_TestCase
+class OAuthTest extends PHPUnit_Framework_TestCase
 {
     public function testInstanceMethod()
     {

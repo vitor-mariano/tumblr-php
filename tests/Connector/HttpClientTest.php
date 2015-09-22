@@ -4,7 +4,7 @@ use GuzzleHttp\Client;
 use MatheusMariano\Tumblr\Connector\Auth\Authenticable;
 use MatheusMariano\Tumblr\Connector\HttpClient;
 
-class HttpClientTest extends \PHPUnit_Framework_TestCase
+class HttpClientTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
@@ -14,6 +14,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
         $this->auth->shouldReceive('getAuth')->once();
         $this->auth->shouldReceive('getHandler')->once();
     }
+
     public function tearDown()
     {
         Mockery::close();

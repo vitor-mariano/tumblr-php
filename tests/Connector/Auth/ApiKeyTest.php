@@ -2,7 +2,7 @@
 
 use MatheusMariano\Tumblr\Connector\Auth\ApiKey;
 
-class ApiKeyTest extends \PHPUnit_Framework_TestCase
+class ApiKeyTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
