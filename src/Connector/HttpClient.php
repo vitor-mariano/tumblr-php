@@ -14,17 +14,16 @@ class HttpClient
     /**
      * Create a HttpClient instance.
      *
-     * @param string     $baseUri
-     * @param OAuth|null $oauth
+     * @param Auth\Authenticable $auth
+     * @param string $baseUri
      */
-    public function __construct($baseUri, OAuth $oauth = null)
+    public function __construct(Auth\Authenticable $auth, $baseUri)
     {
-        $this->params = ['base_uri' => $baseUri];
-
-        if (! is_null($oauth)) {
-            $this->params['auth'] = 'oauth';
-            $this->params['handler'] = $oauth->getHandler();
-        }
+        $this->params = [
+            'base_uri' => $baseUri,
+            'auth' => $auth->getAuth(),
+            'handler' => $auth->getHandler(),
+        ];
     }
 
     /**

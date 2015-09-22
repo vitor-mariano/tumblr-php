@@ -1,37 +1,34 @@
 <?php
 
 use GuzzleHttp\Client;
-use MatheusMariano\Tumblr\Connector\OAuth;
+use MatheusMariano\Tumblr\Connector\Auth\Authenticable;
 use MatheusMariano\Tumblr\Connector\HttpClient;
 
 class HttpClientTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->auth = Mockery::mock(Authenticable::class);
+        $this->auth->shouldReceive('getAuth')->once();
+        $this->auth->shouldReceive('getHandler')->once();
+    }
     public function tearDown()
     {
         Mockery::close();
     }
 
-    public function testIntanceMethodWithoutOAuth()
+    public function testIntanceMethod()
     {
-        $oauth = Mockery::mock(OAuth::class);
-        $oauth->shouldNotReceive('getHandler');
-        
-        $httpClient = new HttpClient('https://example.com/');
-    }
-
-    public function testIntanceMethodWithOAuth()
-    {
-        $oauth = Mockery::mock(OAuth::class);
-        $oauth->shouldReceive('getHandler')->once();
-
-        $httpClient = new HttpClient('https://example.com/', $oauth);
+        $httpClient = new HttpClient($this->auth, 'https://example.com/');
     }
 
     public function testRequestMethodWithoutParameters()
     {
         $httpClient = Mockery::mock(
             HttpClient::class . '[getClient]',
-            ['https://example.com']
+            [$this->auth, 'https://example.com']
         );
 
         $httpClient
@@ -51,7 +48,7 @@ class HttpClientTest extends \PHPUnit_Framework_TestCase
     {
         $httpClient = Mockery::mock(
             HttpClient::class . '[getClient]',
-            ['https://example.com']
+            [$this->auth, 'https://example.com']
         );
 
         $httpClient
