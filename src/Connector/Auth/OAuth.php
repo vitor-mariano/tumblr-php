@@ -43,7 +43,7 @@ class OAuth implements Authenticable
      * @param string $tk
      * @param string $ts
      */
-    public function __construct($ck, $cs, $tk = '', $ts = '')
+    public function __construct($ck = '', $cs = '', $tk = '', $ts = '')
     {
         $this->consumerKey = $ck;
         $this->consumerSecret = $cs;
