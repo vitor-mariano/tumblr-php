@@ -25,7 +25,7 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $httpClient = new HttpClient($this->auth, 'https://example.com/');
     }
 
-    public function testRequestMethodWithoutParameters()
+    public function testGetRequestMethodWithoutParameters()
     {
         $httpClient = Mockery::mock(
             HttpClient::class . '[getClient]',
@@ -39,13 +39,13 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
 
         $client
             ->shouldReceive('request')
-            ->with('get', 'path', ['form_params' => []])
+            ->with('get', 'path', ['query' => []])
             ->once();
 
         $httpClient->request('get', 'path');
     }
 
-    public function testRequestMethodWithParameters()
+    public function testPostRequestMethodWithParameters()
     {
         $httpClient = Mockery::mock(
             HttpClient::class . '[getClient]',

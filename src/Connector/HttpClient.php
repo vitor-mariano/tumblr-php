@@ -39,7 +39,7 @@ class HttpClient
         $client = $this->getClient();
 
         return $client->request($method, $path, [
-            'form_params' => $params
+            $method == 'get' ? 'query' : 'form_params' => $params
         ]);
     }
 
