@@ -3,6 +3,7 @@
 namespace MatheusMariano\Tumblr\Connector;
 
 use Psr\Http\Message\ResponseInterface;
+use MatheusMariano\Tumblr\Connector\Auth\Authenticable;
 
 class HttpClient
 {
@@ -16,10 +17,10 @@ class HttpClient
     /**
      * Create a HttpClient instance.
      *
-     * @param Auth\Authenticable $auth
+     * @param Authenticable $auth
      * @param string $baseUri
      */
-    public function __construct(Auth\Authenticable $auth, $baseUri)
+    public function __construct(Authenticable $auth, $baseUri)
     {
         $this->params = [
             'base_uri' => $baseUri,

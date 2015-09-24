@@ -2,6 +2,9 @@
 
 namespace MatheusMariano\Tumblr;
 
+use MatheusMariano\Tumblr\Connector\HttpClient;
+use MatheusMariano\Tumblr\Connector\Auth\Authenticable;
+
 class Authorizer
 {
     /**
@@ -12,16 +15,16 @@ class Authorizer
     /**
      * The Authenticable instance.
      *
-     * @var Connector\Auth\Authenticable
+     * @var Authenticable
      */
     protected $auth;
 
     /**
      * Create a new Authorizer instance.
      *
-     * @param Connector\Auth\Authenticable $auth
+     * @param Authenticable $auth
      */
-    public function __construct(Connector\Auth\Authenticable $auth)
+    public function __construct(Authenticable $auth)
     {
         $this->auth = $auth;
     }
@@ -76,10 +79,10 @@ class Authorizer
     /**
      * Create a new HTTP Client instance.
      *
-     * @return Connector\HttpClient
+     * @return HttpClient
      */
     public function getHttpClient()
     {
-        return new Connector\HttpClient($this->auth, self::BASE_URI);
+        return new HttpClient($this->auth, self::BASE_URI);
     }
 }
