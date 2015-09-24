@@ -2,8 +2,6 @@
 
 namespace MatheusMariano\Tumblr;
 
-use Psr\Http\Message\ResponseInterface;
-
 class Authorizer
 {
     /**
@@ -32,7 +30,7 @@ class Authorizer
      * Send a request to get temporary tokens.
      *
      * @param  string  $callback
-     * @return ResponseInterface
+     * @return array
      */
     public function getTemporaryTokens($callback)
     {
@@ -49,7 +47,7 @@ class Authorizer
      * Send a request to get the definitive tokens.
      *
      * @param  string  $verifier
-     * @return ResponseInterface
+     * @return array
      */
     public function getTokens($verifier)
     {
@@ -65,12 +63,12 @@ class Authorizer
     /**
      * Parse the raw response.
      *
-     * @param  ResponseInterface  $response
+     * @param  string  $raw
      * @return array
      */
-    protected function parseResponse(ResponseInterface $response)
+    protected function parseResponse($raw)
     {
-        parse_str((string) $response->getBody(), $tokens);
+        parse_str($raw, $tokens);
 
         return $tokens;
     }

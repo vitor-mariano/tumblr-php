@@ -1,8 +1,9 @@
 <?php
 
 use GuzzleHttp\Client;
-use MatheusMariano\Tumblr\Connector\Auth\Authenticable;
+use Psr\Http\Message\ResponseInterface;
 use MatheusMariano\Tumblr\Connector\HttpClient;
+use MatheusMariano\Tumblr\Connector\Auth\Authenticable;
 
 class HttpClientTest extends PHPUnit_Framework_TestCase
 {
@@ -10,9 +11,19 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->auth = Mockery::mock(Authenticable::class);
-        $this->auth->shouldReceive('getAuth')->once();
-        $this->auth->shouldReceive('getHandler')->once();
+        $auth = Mockery::mock(Authenticable::class);
+        $auth->shouldReceive('getAuth')->once();
+        $auth->shouldReceive('getHandler')->once();
+
+        $this->httpClient = Mockery::mock(
+            HttpClient::class . '[getClient]',
+            [$auth, 'https://example.com']
+        );
+
+        $this->httpClient
+            ->shouldReceive('getClient')
+            ->once()
+            ->andReturn($this->client = Mockery::mock(Client::class));
     }
 
     public function tearDown()
@@ -20,48 +31,33 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         Mockery::close();
     }
 
-    public function testIntanceMethod()
-    {
-        $httpClient = new HttpClient($this->auth, 'https://example.com/');
-    }
-
     public function testGetRequestMethodWithoutParameters()
     {
-        $httpClient = Mockery::mock(
-            HttpClient::class . '[getClient]',
-            [$this->auth, 'https://example.com']
-        );
-
-        $httpClient
-            ->shouldReceive('getClient')
-            ->once()
-            ->andReturn($client = Mockery::mock(Client::class));
-
-        $client
+        $this->client
             ->shouldReceive('request')
             ->with('get', 'path', ['query' => []])
-            ->once();
+            ->once()
+            ->andReturn($response = Mockery::mock(ResponseInterface::class));
 
-        $httpClient->request('get', 'path');
+        $response->shouldReceive('getBody')->once()->andReturn('raw');
+
+        $string = $this->httpClient->request('get', 'path');
+
+        $this->assertEquals('raw', $string);
     }
 
     public function testPostRequestMethodWithParameters()
     {
-        $httpClient = Mockery::mock(
-            HttpClient::class . '[getClient]',
-            [$this->auth, 'https://example.com']
-        );
-
-        $httpClient
-            ->shouldReceive('getClient')
-            ->once()
-            ->andReturn($client = Mockery::mock(Client::class));
-
-        $client
+        $this->client
             ->shouldReceive('request')
             ->with('post', 'path', ['form_params' => ['foo' => 'bar']])
-            ->once();
+            ->once()
+            ->andReturn($response = Mockery::mock(ResponseInterface::class));
 
-        $httpClient->request('post', 'path', ['foo' => 'bar']);
+        $response->shouldReceive('getBody')->once()->andReturn('raw');
+
+        $string = $this->httpClient->request('post', 'path', ['foo' => 'bar']);
+
+        $this->assertEquals('raw', $string);
     }
 }

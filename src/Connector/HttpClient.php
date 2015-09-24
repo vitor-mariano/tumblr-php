@@ -2,6 +2,8 @@
 
 namespace MatheusMariano\Tumblr\Connector;
 
+use Psr\Http\Message\ResponseInterface;
+
 class HttpClient
 {
     /**
@@ -32,15 +34,28 @@ class HttpClient
      * @param  string  $method
      * @param  string  $path
      * @param  array   $params
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return string
      */
     public function request($method, $path, array $params = [])
     {
         $client = $this->getClient();
 
-        return $client->request($method, $path, [
+        $response = $client->request($method, $path, [
             $method == 'get' ? 'query' : 'form_params' => $params
         ]);
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Parse the raw response.
+     *
+     * @param  ResponseInterface  $response
+     * @return string
+     */
+    protected function parseResponse(ResponseInterface $response)
+    {
+        return (string) $response->getBody();
     }
 
     /**
