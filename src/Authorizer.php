@@ -2,7 +2,8 @@
 
 namespace MatheusMariano\Tumblr;
 
-use Psr\Http\Message\ResponseInterface;
+use MatheusMariano\Tumblr\Connector\HttpClient;
+use MatheusMariano\Tumblr\Connector\Auth\Authenticable;
 
 class Authorizer
 {
@@ -14,16 +15,16 @@ class Authorizer
     /**
      * The Authenticable instance.
      *
-     * @var Connector\Auth\Authenticable
+     * @var Authenticable
      */
     protected $auth;
 
     /**
      * Create a new Authorizer instance.
      *
-     * @param Connector\Auth\Authenticable $auth
+     * @param Authenticable $auth
      */
-    public function __construct(Connector\Auth\Authenticable $auth)
+    public function __construct(Authenticable $auth)
     {
         $this->auth = $auth;
     }
@@ -32,7 +33,7 @@ class Authorizer
      * Send a request to get temporary tokens.
      *
      * @param  string  $callback
-     * @return ResponseInterface
+     * @return array
      */
     public function getTemporaryTokens($callback)
     {
@@ -49,7 +50,7 @@ class Authorizer
      * Send a request to get the definitive tokens.
      *
      * @param  string  $verifier
-     * @return ResponseInterface
+     * @return array
      */
     public function getTokens($verifier)
     {
@@ -65,12 +66,12 @@ class Authorizer
     /**
      * Parse the raw response.
      *
-     * @param  ResponseInterface  $response
+     * @param  string  $raw
      * @return array
      */
-    protected function parseResponse(ResponseInterface $response)
+    protected function parseResponse($raw)
     {
-        parse_str((string) $response->getBody(), $tokens);
+        parse_str($raw, $tokens);
 
         return $tokens;
     }
@@ -78,10 +79,10 @@ class Authorizer
     /**
      * Create a new HTTP Client instance.
      *
-     * @return Connector\HttpClient
+     * @return HttpClient
      */
     public function getHttpClient()
     {
-        return new Connector\HttpClient($this->auth, self::BASE_URI);
+        return new HttpClient($this->auth, self::BASE_URI);
     }
 }

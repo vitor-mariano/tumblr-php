@@ -2,6 +2,9 @@
 
 namespace MatheusMariano\Tumblr\Connector;
 
+use Psr\Http\Message\ResponseInterface;
+use MatheusMariano\Tumblr\Connector\Auth\Authenticable;
+
 class HttpClient
 {
     /**
@@ -14,10 +17,10 @@ class HttpClient
     /**
      * Create a HttpClient instance.
      *
-     * @param Auth\Authenticable $auth
+     * @param Authenticable $auth
      * @param string $baseUri
      */
-    public function __construct(Auth\Authenticable $auth, $baseUri)
+    public function __construct(Authenticable $auth, $baseUri)
     {
         $this->params = [
             'base_uri' => $baseUri,
@@ -32,15 +35,28 @@ class HttpClient
      * @param  string  $method
      * @param  string  $path
      * @param  array   $params
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return string
      */
     public function request($method, $path, array $params = [])
     {
         $client = $this->getClient();
 
-        return $client->request($method, $path, [
-            $method == 'get' ? 'query' : 'form_params' => $params
+        $response = $client->request($method, $path, [
+            strtolower($method) == 'get' ? 'query' : 'form_params' => $params
         ]);
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Parse the raw response.
+     *
+     * @param  ResponseInterface  $response
+     * @return string
+     */
+    protected function parseResponse(ResponseInterface $response)
+    {
+        return (string) $response->getBody();
     }
 
     /**
