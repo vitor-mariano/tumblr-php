@@ -41,7 +41,7 @@ class HttpClient
         $client = $this->getClient();
 
         $response = $client->request($method, $path, [
-            $method == 'get' ? 'query' : 'form_params' => $params
+            strtolower($method) == 'get' ? 'query' : 'form_params' => $params
         ]);
 
         return $this->parseResponse($response);

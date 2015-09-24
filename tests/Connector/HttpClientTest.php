@@ -31,22 +31,22 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         Mockery::close();
     }
 
-    public function testGetRequestMethodWithoutParameters()
+    public function testGetRequest()
     {
         $this->client
             ->shouldReceive('request')
-            ->with('get', 'path', ['query' => []])
+            ->with('get', 'path', ['query' => ['foo' => 'bar']])
             ->once()
             ->andReturn($response = Mockery::mock(ResponseInterface::class));
 
         $response->shouldReceive('getBody')->once()->andReturn('raw');
 
-        $string = $this->httpClient->request('get', 'path');
+        $string = $this->httpClient->request('get', 'path', ['foo' => 'bar']);
 
         $this->assertEquals('raw', $string);
     }
 
-    public function testPostRequestMethodWithParameters()
+    public function testPostRequest()
     {
         $this->client
             ->shouldReceive('request')
@@ -57,6 +57,21 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
         $response->shouldReceive('getBody')->once()->andReturn('raw');
 
         $string = $this->httpClient->request('post', 'path', ['foo' => 'bar']);
+
+        $this->assertEquals('raw', $string);
+    }
+
+    public function testRequestWithUppercaseHttpMethod()
+    {
+        $this->client
+            ->shouldReceive('request')
+            ->with('GET', 'path', ['query' => []])
+            ->once()
+            ->andReturn($response = Mockery::mock(ResponseInterface::class));
+
+        $response->shouldReceive('getBody')->once()->andReturn('raw');
+
+        $string = $this->httpClient->request('GET', 'path');
 
         $this->assertEquals('raw', $string);
     }
