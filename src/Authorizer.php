@@ -7,6 +7,8 @@ use MatheusMariano\Tumblr\Connector\Auth\Authenticable;
 
 class Authorizer
 {
+    use HttpClientTrait;
+    
     /**
      * Base URI.
      */
@@ -74,15 +76,5 @@ class Authorizer
         parse_str($raw, $tokens);
 
         return $tokens;
-    }
-
-    /**
-     * Create a new HTTP Client instance.
-     *
-     * @return HttpClient
-     */
-    public function getHttpClient()
-    {
-        return new HttpClient($this->auth, self::BASE_URI);
     }
 }
