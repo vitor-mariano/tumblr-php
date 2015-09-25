@@ -9,8 +9,6 @@ class HttpClientTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        parent::setUp();
-
         $auth = Mockery::mock(Authenticable::class);
         $auth->shouldReceive('getAuth')->once();
         $auth->shouldReceive('getHandler')->once();
