@@ -2,6 +2,8 @@
 
 namespace MatheusMariano\Tumblr;
 
+use MatheusMariano\Tumblr\Connector\HttpClient;
+
 trait HttpClientTrait
 {
     /**
