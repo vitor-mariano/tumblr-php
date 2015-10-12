@@ -10,19 +10,14 @@ Through the [Composer](https://getcomposer.org/), you must use the package `math
 ``` php
 use MatheusMariano\Tumblr\Client;
 use MatheusMariano\Tumblr\Connector\Auth\ApiKey;
-use GuzzleHttp\Exception\ClientException;
 
 $auth = new ApiKey('my-api-key');
 $client = new Client($auth);
 
-try {
-    $object = $client->get('blog/nutright.tumblr.com/likes', [
-        'api_key' => true,
-        'limit' => 10
-    ]);
-} catch (ClientException $e) {
-    // Do something.
-}
+$object = $client->get('blog/nutright.tumblr.com/posts', [
+    'api_key' => true,
+    'tag' => 'fruit'
+]);
 ```
 ### Authentication
 Before request any method from API, is necessary to authenticate our client. For this, there are two authentication levels:
