@@ -5,7 +5,7 @@
 An unofficial PHP client for the [Tumblr API](https://www.tumblr.com/docs/en/api/v2)
 
 ## Installing
-Through the [Composer](https://getcomposer.org/), you must use the package `matheusmariano/tumblr`.
+Through the [Composer](https://getcomposer.org/), you must require the package `matheusmariano/tumblr`.
 ## Using
 ``` php
 use MatheusMariano\Tumblr\Client;
@@ -20,12 +20,12 @@ $object = $client->get('blog/nutright.tumblr.com/posts', [
 ]);
 ```
 ### Authentication
-Before request any method from API, is necessary to authenticate our client. For this, there are two authentication levels:
+Before request any method from API, it's necessary to authenticate our client. To do it, there are two authentication levels:
 
 - API key
 - OAuth
 
-The API key level is the simplest one, because it just needs the **consumer key** given by the Tumblr when [registering your application](https://www.tumblr.com/oauth/apps). To use it, you should import the `ApiKey` class
+The API key level is the simplest one, because it just needs the **consumer key** given by the Tumblr when [registering your application](https://www.tumblr.com/oauth/apps). To use this, you should import the `ApiKey` class
 ``` php
 use MatheusMariano\Tumblr\Connector\Auth\ApiKey;
 ```
@@ -37,7 +37,7 @@ You can use the OAuth level practically the same way, importing the `OAuth` clas
 ``` php
 use MatheusMariano\Tumblr\Connector\Auth\OAuth;
 ```
-and then instantiating it with all the necessary keys.
+and then instantiating with all the necessary keys.
 ``` php
 $auth = new OAuth; // Also accepts ordered parameters.
 $auth->consumerKey = '...';
@@ -46,11 +46,11 @@ $auth->oauthToken = '...';
 $auth->oauthTokenSecret = '...';
 ```
 ### OAuth tokens and Authorizer
-To get the tokens from an user is a little bit different task, because he needs to be notified and give authorization to your application. Is a proccess that involves a lot of steps, but the `Authorizer` class turns everything easier. For every used page, you should import the class this way.
+Getting the tokens from users is a little bit different task, because they need to be notified and give authorization to your application. It's a proccess that involves a lot of steps, but the `Authorizer` class turns everything easier. For every used page, you should import the class this way.
 ``` php
 use MatheusMariano\Tumblr\Authorizer;
 ```
-The first step is to send your consumers to the Tumblr with your callback URI. Let's consider it should be `https://example.com/auth/tumblr/callback`.
+The first step is to send your consumers to Tumblr with your callback URI. Let's consider it should be `https://example.com/auth/tumblr/callback`.
 ``` php
 $auth = new OAuth;
 $auth->consumerKey = '...';
@@ -59,11 +59,11 @@ $auth->consumerSecret = '...';
 $authorizer = new Authorizer($auth);
 $tokens = $authorizer->getTemporaryTokens('https://example.com/auth/tumblr/callback');
 ```
-If the consumers are accepted, you will receive temporary tokens.
+If consumers are accepted, you should receive temporary tokens.
 ``` php
 ['oauth_token' => '...', 'oauth_token_secret' => '...']
 ```
-Save these tokens, because they will be used in the next session. Now you need to redirect your user to `https://www.tumblr.com/oauth/authorize?oauth_token={$tokens['oauth_token']}`. There, he will be able to authorize your application and then will be redirected to the callback URI.
+Save these tokens, because they are necessary for the next session. Now you need to redirect your users to `https://www.tumblr.com/oauth/authorize?oauth_token={$tokens['oauth_token']}`. There, they are going to be able to authorize your application and then going to be redirected to the callback URI.
 
 In the `https://example.com/auth/tumblr/callback`, the step is to send the consumers and the temporary tokens together with GET parameter `oauth_verifier` received from Tumblr.
 ``` php
@@ -80,7 +80,7 @@ If you prefer, you can use the global `$_GET` to get the `oauth_verifier`.
 ``` php
 $oauthVerifier = $_GET['oauth_verifier'];
 ```
-If everything runs as plained, you will receive the user definitive tokens.
+If everything runs as plained, you should receive the user definitive tokens.
 ### Client
 After configure one of those authenticators, you can import the `Client` class
 ``` php
@@ -96,7 +96,7 @@ In the version `0.1` of this package, the `Client` has only 2 very basic methods
 - `get`
 - `post`
 
-Is important to follow the [Tumblr API](https://www.tumblr.com/docs/en/api/v2) to use these methods and your responses correctly.
+It's important to follow the [Tumblr API](https://www.tumblr.com/docs/en/api/v2) to use these methods and your responses correctly.
 
 Example: getting the [text posts](https://www.tumblr.com/docs/en/api/v2#text-posts) that has the `fruit` tag.
 ``` php
@@ -105,7 +105,7 @@ $object = $client->get('blog/nutright.tumblr.com/posts/text', [
     'tag' => 'fruit',
 ]);
 ```
-The response will be an `stdClass` object with all content of `response`, following the [Tumblr API](https://www.tumblr.com/docs/en/api/v2).
+The response should be an `stdClass` object with all content of `response`, following the [Tumblr API](https://www.tumblr.com/docs/en/api/v2).
 ``` php
 $object->total_posts; // int
 $object->posts; // array
@@ -122,7 +122,7 @@ $client->post('blog/nutright.tumblr.com/post', [
 ]);
 ```
 ### Exceptions
-Request methods may receive errors, generaly `401 not authorized` and `404 not found`. These errors calls exceptions like `GuzzleHttp\Exception\ClientException`, `GuzzleHttp\Exception\ServerException` etc., that can be treated with `try...catch`. See the [Guzzle documentation](http://docs.guzzlephp.org/en/latest/quickstart.html#exceptions) for more information.
+Request methods may receive errors, generaly `401 not authorized` and `404 not found`, throwing exceptions like `GuzzleHttp\Exception\ClientException`, `GuzzleHttp\Exception\ServerException` etc., which should be treated with `try...catch`. See the [Guzzle documentation](http://docs.guzzlephp.org/en/latest/quickstart.html#exceptions) for more information.
 ``` php
 try {
     $client->get('blog/nutright.tumblr.com/followers', ['api_key' => true]);
@@ -130,3 +130,5 @@ try {
     // Do something
 }
 ```
+## License
+PHP Tumblr Client a is open-sourced software licensed under the MIT license.
