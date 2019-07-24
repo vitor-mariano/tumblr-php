@@ -62,7 +62,9 @@ class Client
     {
         $httpClient = $this->getHttpClient();
 
-        $httpClient->request('post', $path, $params);
+        $response = $httpClient->request('post', $path, $params);
+        
+        return $this->parseResponse($response);
     }
 
     /**
